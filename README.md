@@ -1,86 +1,60 @@
-This README is written in a professional, technical style suitable for a high-level university project. It covers all the stages you completed, including the multimodal (RGB-D) and multi-task learning bonuses.
+# Automatic Calorie and Macronutrient Estimation from RGB-D Images
 
-As requested, I have used natural English and avoided all long dashes (—).
+This repository contains the final project for the **Machine Learning 2026 Course at Skoltech**. We developed an end-to-end machine learning pipeline to estimate the nutritional content of meals using the Nutrition5k dataset. Our work progresses from classical ML baselines to advanced multimodal multi-task deep learning architectures.
 
-Automatic Calorie and Macronutrient Estimation from RGB-D Images
+## Project Overview
 
-This repository contains the final project for the Machine Learning 2026 Course at Skoltech. The project focuses on estimating the nutritional content of meals using the Nutrition5k dataset. We implemented a complete machine learning pipeline, ranging from classical ML baselines to advanced multimodal multi-task deep learning models.
+Visual calorie estimation is a difficult task due to the high variance in portion sizes and the presence of hidden ingredients. We used the **Nutrition5k** dataset, which provides overhead RGB images, depth maps, and laboratory-accurate nutritional data. Our final cleaned dataset includes 2892 synchronized meals.
 
-Project Overview
+### Key Components
+* **Data Cleaning:** A pipeline that filters physical inconsistencies, such as energy density exceeding 9 kcal/g.
+* **Baseline Tournament:** Evaluation of ResNet50, EfficientNet-B0, and ViT embeddings with Ridge, Random Forest, and XGBoost regressors.
+* **Deep Learning Fine-Tuning:** Comparative study of EfficientNet-B0 and B4 architectures using frozen and unfrozen backbone strategies.
+* **Multimodal Integration:** 4-channel input processing (RGB + Depth) to capture the 3D volume of food.
+* **Multi-task Learning:** Simultaneous prediction of Calories, Protein, Fat, and Carbohydrates using a custom Energy-Weighted Loss function.
 
-Visual calorie estimation is a challenging task due to portion variance and hidden ingredients. Our approach utilizes the Nutrition5k dataset, which provides overhead RGB images, depth maps, and laboratory-accurate nutritional data for 5000 real world meals.
+## Dataset
 
-Key Features
+We utilized the **Nutrition5k** dataset by Google Research. The imagery was processed as follows:
+* **RGB:** Resized to 224x224 (B0) and 380x380 (B4).
+* **Depth:** Normalized and clipped at 400 mm to focus on the dish volume.
+* **Synchronization:** Only dishes with complete metadata and both image modalities were used.
 
-Data Cleaning: Automated pipeline to filter physical inconsistencies (e.g., energy density exceeding 9 kcal/g).
+## Experimental Results
 
-Baseline Tournament: Comparison of ResNet50, EfficientNet-B0, and ViT embeddings with Ridge, Random Forest, and XGBoost regressors.
+Our results show that full backbone training and the addition of depth data significantly improve accuracy.
 
-Deep Learning Fine-Tuning: End-to-end training of EfficientNet-B0 and B4 architectures.
+| Project Stage | Input Data | MAE (kcal) | R2 Score |
+| :--- | :--- | :--- | :--- |
+| 1. Baseline (ResNet50 + XGBoost) | RGB | 75.67 | 0.70 |
+| 2. Fine-Tuning (Frozen Body) | RGB | 97.71 | 0.39 |
+| 3. Fine-Tuning (Full Unfreeze) | RGB | 65.79 | 0.71 |
+| **4. Bonus Model (Multi-task)** | **RGB + Depth** | **49.83** | **0.83** |
 
-Multimodal Integration: Use of 4-channel input (RGB + Depth) for improved volume estimation.
+### Model Scaling
+We also tested EfficientNet-B4. In the fully unfrozen RGB setup, B4 achieved an MAE of 63.49 kcal, outperforming the B0 model.
 
-Multi-task Learning: Simultaneous prediction of Calories, Protein, Fat, and Carbohydrates using a custom Energy-Weighted Loss function.
+## Error Analysis
 
-Dataset
+A visual audit of the largest errors revealed three main challenges:
+1. **Visual Occlusion:** High-calorie items hidden under low-calorie garnishes.
+2. **Invisible Ingredients:** Difficulty in detecting calorie-dense oils and butter.
+3. **Regression to the Mean:** The model tends to underestimate extreme high-calorie portions (outliers).
 
-We used the Nutrition5k dataset (Google Research). Our final cleaned and synchronized subset contains 2892 unique dishes with:
+## System Requirements
 
-RGB overhead photos.
+The project was implemented in **Google Colab** using an **NVIDIA Tesla T4 GPU**.
 
-Raw depth maps (normalized and clipped at 400 mm).
+### Core Libraries
+* `torch`, `torchvision`, `timm`
+* `scikit-learn`, `xgboost`
+* `pandas`, `numpy`, `matplotlib`, `seaborn`
 
-Precise mass and macronutrient labels.
+## Team Members
 
-System Requirements
+* **Ruslan Konurin:** Literature review, data cleaning, B4 scaling, and error analysis.
+* **Ivan Gryakalov:** Baseline ML tournament, multi-task framework design, and data synchronization.
+* **Magomedrashad Ismailov:** Training pipeline implementation, custom loss functions, and EDA.
 
-The project was developed and tested in Google Colab using an NVIDIA Tesla T4 GPU.
-
-Libraries
-
-PyTorch
-
-torchvision
-
-timm (PyTorch Image Models)
-
-scikit-learn
-
-pandas, numpy
-
-matplotlib, seaborn
-
-Results Summary
-
-Our experiments show that unfreezing the backbone and adding depth information significantly reduces prediction error.
-
-Stage	Input Modality	MAE (kcal)	R2 Score
-Baseline (XGBoost)	RGB	75.67	0.70
-Fine-tuning (Frozen)	RGB	97.71	0.39
-Fine-tuning (Unfrozen)	RGB	65.79	0.71
-Final Bonus Model	RGB + Depth	49.83	0.83
-Scaling Insights
-
-We also tested EfficientNet-B4 at a higher resolution (380x380). While B4 showed better feature extraction, it required a smaller batch size (8) due to VRAM limits on the Tesla T4.
-
-Error Analysis
-
-Visual inspection of the largest errors revealed that the model primarily struggles with:
-
-Visual Occlusion: High-calorie items hidden under garnishes or rice.
-
-Invisible Fats: Difficulty in detecting calorie-dense oils and butter that do not change dish volume.
-
-Extreme Outliers: Large portions (over 1200 kcal) where the model tends to predict values closer to the mean.
-
-Team Members
-
-Ruslan Konurin: Data cleaning, B4 scaling experiments, error analysis, and documentation.
-
-Ivan Gryakalov: Baseline ML tournament, multi-task framework design, and data synchronization.
-
-Magomedrashad Ismailov: Training pipeline implementation, custom loss functions, and EDA visualizations.
-
-License
-
+## License
 This project is for educational purposes as part of the Skoltech Machine Learning course.
