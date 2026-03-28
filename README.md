@@ -41,14 +41,46 @@ A visual audit of the largest errors revealed three main challenges:
 2. **Invisible Ingredients:** Difficulty in detecting calorie-dense oils and butter.
 3. **Regression to the Mean:** The model tends to underestimate extreme high-calorie portions (outliers).
 
-## System Requirements
+## Getting Started (Installation & Usage)
 
-The project was implemented in **Google Colab** using an **NVIDIA Tesla T4 GPU**.
+The project was originally implemented and tested in **Google Colab** using an **NVIDIA Tesla T4 GPU**. Due to the deep learning models (EfficientNet, ViT) and multimodal data used in this pipeline, a CUDA-enabled GPU is highly recommended for reasonable training times.
 
-### Core Libraries
-* `torch`, `torchvision`, `timm`
-* `scikit-learn`, `xgboost`
-* `pandas`, `numpy`, `matplotlib`, `seaborn`
+### Option 1: Run in Google Colab (Recommended & Easiest)
+1. Open a new notebook in [Google Colab](https://colab.research.google.com/).
+2. Change the runtime to use a GPU (`Runtime` -> `Change runtime type` -> select `T4 GPU`).
+3. Install the required non-standard libraries by running the following command in the first cell:
+   ```bash
+   !pip install timm xgboost
+   ```
+4. Upload the project script or notebook and run it. 
+5. *Authentication:* The script streams imagery directly from a Google Cloud Storage (GCS) bucket. When the `auth.authenticate_user()` cell runs, a popup will appear. Log in with a Google account that has access to the `nutrition5k_dataset` project.
+
+### Option 2: Run Locally (Windows / macOS / Linux)
+For local execution, ensure you have **Python 3.9+** and the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) installed on your system.
+
+**1. Clone the repository:**
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+
+**2. Set up a virtual environment and install dependencies:**
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+**3. Authenticate with Google Cloud:**
+Since the pipeline streams images directly from GCS (to save local disk space), you must authenticate your local environment. Run the following command and log in via your browser:
+```bash
+gcloud auth application-default login
+```
+
+**4. Execute the pipeline:**
+```bash
+python project_ml_final.py
+```
 
 ## Team Members
 
