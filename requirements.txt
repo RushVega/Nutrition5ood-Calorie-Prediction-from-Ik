@@ -1,30 +1,33 @@
 # --- Data Manipulation & Analysis ---
-pandas
-numpy
+# Core libraries for metadata processing
+pandas>=2.0.0
+numpy>=1.24.0
 
 # --- Google Cloud Platform Integration ---
-# Required for GCS bucket access and data streaming
-google-cloud-storage
-google-auth
+# Required for GCS bucket access and data streaming (standard alternatives to colab-auth)
+google-cloud-storage>=2.10.0
+google-auth>=2.20.0
 
 # --- Image Processing ---
-Pillow
+# Used for loading and transforming RGB and Depth images
+Pillow>=9.5.0
 
 # --- Deep Learning (Computer Vision) ---
-# Core frameworks for EfficientNet and Vision Transformers
-torch
-torchvision
+# Frameworks for EfficientNet (b0/b4) and Vision Transformers
+torch>=2.0.0
+torchvision>=0.15.0
 timm>=0.9.2
 
 # --- Classical Machine Learning (Baselines) ---
-# Used for Ridge, Random Forest, and XGBoost models
-scikit-learn
-xgboost
+# Regression models: Ridge, Random Forest, and XGBoost
+scikit-learn>=1.2.0
+xgboost>=2.0.0
 
 # --- Visualization & Reporting ---
-# Required for EDA and training curve generation
-matplotlib
-seaborn
+# Tools for EDA, correlation matrices, and training curves
+matplotlib>=3.7.0
+seaborn>=0.12.0
 
 # --- Progress Tracking ---
-tqdm
+# Interactive progress bars for training loops
+tqdm>=4.65.0
