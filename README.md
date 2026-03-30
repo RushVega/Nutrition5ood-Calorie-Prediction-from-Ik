@@ -82,11 +82,5 @@ gcloud auth application-default login
 python project_ml_final.py
 ```
 
-## Team Members
-
-* **Ruslan Konurin:** Literature review, data cleaning, B4 scaling, and error analysis.
-* **Ivan Gryakalov:** Baseline ML tournament, multi-task framework design, and data synchronization.
-* **Magomedrashad Ismailov:** Training pipeline implementation, custom loss functions, and EDA.
-
 ## License
 This project is for educational purposes as part of the Skoltech Machine Learning course.
